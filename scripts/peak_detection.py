@@ -11,23 +11,33 @@ import numpy as np
 sensitivity_ = 50
 
 def callback(msg):
-  print(msg.data)
+  global sensitivity_
+
+  maxid_list = []
+
   y = np.array(msg.data)
 
   maxid = signal.argrelmax(y, order=1) #最大値
   minid = signal.argrelmin(y, order=1) #最小値
 
+  maxid = maxid[0].tolist()
+  minid = minid[0].tolist()
+
+  for i in maxid:
+    if y[i] > sensitivity_*255/100:
+      maxid_list.append(i)
+
   max_id_msg = Int32MultiArray()
   min_id_msg = Int32MultiArray()
 
-  max_id_msg.data = maxid[0].tolist()
-  min_id_msg.data = minid[0].tolist()
+  max_id_msg.data = maxid_list
+  min_id_msg.data = minid
 
   max_pub.publish(max_id_msg)
   min_pub.publish(min_id_msg)
 
 def sensitivity_callback(msg):
-  print(msg)
+#  print(msg)
   global sensitivity_
   sensitivity_ = msg.data
 
