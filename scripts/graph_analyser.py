@@ -10,11 +10,23 @@ import numpy as np
 
 sensitivity_ = 50
 
-mode_list = ["peak","width"]
-mode = "width"
+mode_list = ["peak","left","right","width"]
+mode = "left"
 
 def width_detection(data):
   print(data)
+
+def left_detection(data):
+  max_idx = 0
+  max_value = 0
+
+  for i in range(len(data)):
+    d = data[i]
+    if max_value < d:
+      max_idx = i
+      max_value = d
+
+  return max_idx, max_value
 
 def peak_detection(data):
   global sensitivity_
@@ -53,6 +65,9 @@ def callback(msg):
   if mode=="width":
     width_detection(data)
 
+  if mode=="left":
+    idx, value = left_detection(data)
+    print("detect:",idx,value)
 
 
 def sensitivity_callback(msg):
