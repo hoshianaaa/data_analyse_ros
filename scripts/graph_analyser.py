@@ -10,6 +10,12 @@ import numpy as np
 
 sensitivity_ = 50
 
+mode_list = ["peak","width"]
+mode = "width"
+
+def width_detection(data):
+  print(data)
+
 def peak_detection(data):
   global sensitivity_
 
@@ -41,7 +47,12 @@ def callback(msg):
 
   data = msg.data
 
-  peak_detection(data)
+  if mode=="peak":
+    peak_detection(data)
+
+  if mode=="width":
+    width_detection(data)
+
 
 
 def sensitivity_callback(msg):
